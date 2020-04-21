@@ -1,0 +1,9 @@
+*.o
+*.d
+*.a
+*.so*
+*.tar*
+*pycache*
+*ipynb_checkpoint*
+*/data
+.vscode/
