@@ -26,14 +26,13 @@ originals = {
 }
 
 
-def augment_data():
+def augment_data(augment_times=100):
 
     data = []
 
     original_names = list(originals.keys())
 
-    augment_size = 100
-    while augment_size >= 0:
+    for _ in range(augment_times):
         np.random.shuffle(original_names)
         for name in original_names:
             image = originals[name]
@@ -45,6 +44,7 @@ def augment_data():
             data.append(
                 {
                     "name": name,
+                    "image": image,
                     "crop": {
                         "x": crop_x,
                         "y": crop_y,
@@ -71,7 +71,5 @@ def augment_data():
                     "w": new_box_width,
                     "h": new_box_height,
                 }
-
-        augment_size -= 1
 
     return data
