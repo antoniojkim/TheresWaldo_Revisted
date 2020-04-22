@@ -1,0 +1,5 @@
+git+https://github.com/antoniojkim/Multiprocessor.git
+matplotlib
+numpy
+opencv
+pillow
