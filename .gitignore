@@ -3,6 +3,8 @@
 *.a
 *.so*
 *.tar*
+*.log*
+*.cerr*
 *pycache*
 *ipynb_checkpoint*
 data/data

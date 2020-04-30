@@ -36,10 +36,11 @@ def augment_data(augment_times=100):
         np.random.shuffle(original_names)
         for name in original_names:
             image = originals[name]
-            crop_width = int(image.shape[1] * np.random.uniform(0.7, 0.9))
-            crop_height = int(image.shape[0] * np.random.uniform(0.7, 0.9))
+            crop_width = int(image.shape[1] * np.random.uniform(0.6, 0.8))
+            crop_height = int(image.shape[0] * np.random.uniform(0.6, 0.8))
             crop_x = np.random.randint(image.shape[1] - crop_width)
             crop_y = np.random.randint(image.shape[0] - crop_height)
+            hflip = bool(np.random.randint(2))
 
             data.append(
                 {
@@ -50,6 +51,7 @@ def augment_data(augment_times=100):
                         "y": crop_y,
                         "w": crop_width,
                         "h": crop_height,
+                        "hflip": hflip,
                     },
                 }
             )
@@ -65,6 +67,9 @@ def augment_data(augment_times=100):
             )
 
             if new_box_width > 0 and new_box_height > 0:
+                if hflip:
+                    new_box_x = crop_width - new_box_x - new_box_width
+
                 data[-1]["box"] = {
                     "x": new_box_x,
                     "y": new_box_y,
