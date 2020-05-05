@@ -22,7 +22,7 @@ Using Resnet-50 [6] as a backbone, I built a very simple artificial neural netwo
 
 After about 50 epochs of training, I stopped training after observing that the model was no longer improving. The final model was very limited and it was unable to find a single Waldo in any of the maps.
 
-### Model #2
+### [Model #2: Yolo Head](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v2.ipynb)
 
 For the next iteration, I replace the head of the model with the head used in the Yolo paper [1].
 
@@ -30,10 +30,11 @@ After a number of epochs, it is not clear if this model is performing any better
 
 I originall chose ResNet-50 as the backbone as it was fast and was pretrained. Even though the waldo maps are very different from the images that it was pretrained on, I thought it might still be able to extract some useful features from the maps. I can see now that this is not the case.
 
+### [Model #3: Darknet-19 Backbone](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v3.ipynb)
+
 Next, I will iterate by implementing the darknet-19 architecture described in the Yolo paper [1] and train it from scratch using the waldo maps.
 
-### Model #3
-
+On this iteration, I noticed that my model architecture might not be problem here. Even with the new (slightly modified) darknet-19 architecture, trained from scratch, the model is not fairing very well. Though, the mean loss is converging fairly quickly. I now realize that this is the case as most of the label values are zero and the model weights are just simply converging to zero. This is why the loss is going down but the precision is not going up.
 
 ## Reference
 

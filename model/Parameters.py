@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import logging
 from typing import Dict
 
 import torch
@@ -55,3 +56,12 @@ class Parameters:
 
         self.__dict__.update(params)
         self.use_gpu = self.use_gpu and torch.cuda.is_available()
+
+    def get_logger(self, name, level=logging.INFO):
+        log = logging.getLogger(name)
+        hdlr = logging.FileHandler(self.log_file)
+        formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
+        hdlr.setFormatter(formatter)
+        log.addHandler(hdlr)
+        log.setLevel(level)
+        return log
