@@ -36,8 +36,8 @@ def augment_data(augment_times=100):
         np.random.shuffle(original_names)
         for name in original_names:
             image = originals[name]
-            crop_width = int(image.shape[1] * np.random.uniform(0.6, 0.8))
-            crop_height = int(image.shape[0] * np.random.uniform(0.6, 0.8))
+            crop_width = int(image.shape[1] * np.random.uniform(0.75, 0.95))
+            crop_height = int(image.shape[0] * np.random.uniform(0.75, 0.95))
             crop_x = np.random.randint(image.shape[1] - crop_width)
             crop_y = np.random.randint(image.shape[0] - crop_height)
             hflip = bool(np.random.randint(2))

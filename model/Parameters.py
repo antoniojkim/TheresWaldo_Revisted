@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+from typing import Dict
 
 import torch
 
@@ -11,39 +12,46 @@ except ImportError:
     from yaml import Loader
 
 
+def get_default_parameters(
+    num_epochs: int = 100,
+    epoch_start: int = 0,
+    batch_size: int = 1,
+    checkpoint_step: int = 2,
+    validation_step: int = 2,
+    num_validation: int = 1000,
+    num_workers: int = 1,
+    learning_rate: float = 0.001,
+    cuda: str = "0",
+    use_gpu: bool = True,
+    pretrained_model_path: float = None,
+    save_model_path: str = "./.checkpoints",
+    log_file: str = "./model.log",
+) -> Dict:
+    """
+    Args:
+        num_epochs: Number of epochs to train for
+        epoch_start: Start counting epochs from this number
+        batch_size: Number of images in each batch
+        checkpoint_step: How often to save checkpoints (epochs)
+        validation_step: How often to perform validation (epochs)
+        num_validation: How many validation images to use
+        num_workers: Number of workers
+        learning_rate: learning rate used for training
+        cuda: GPU ids used for training
+        use_gpu: whether to user gpu for training
+        pretrained_model_path: path to pretrained model
+        save_model_path: path to save model
+        log_file: path to log file
+    """
+    return locals()
+
+
 class Parameters:
     def __init__(self, param_file_path):
-        params = {}
+        params = get_default_parameters()
         if os.path.isfile(param_file_path):
             with open(param_file_path) as file:
-                params = load(file, Loader=Loader)
+                params.update(load(file, Loader=Loader))
 
-        self.num_epochs = params.get("num_epochs", 100)  # Number of epochs to train for
-        self.epoch_start = params.get(
-            "epoch_start", 0
-        )  # Start counting epochs from this number
-        self.batch_size = params.get("batch_size", 1)  # Number of images in each batch
-        self.checkpoint_step = params.get(
-            "checkpoint_step", 2
-        )  # How often to save checkpoints (epochs)
-        self.validation_step = params.get(
-            "validation_step", 2
-        )  # How often to perform validation (epochs)
-        self.num_validation = params.get(
-            "num_validation", 1000
-        )  # How many validation images to use
-        self.num_workers = params.get("num_workers", 1)  # Number of workers
-        self.learning_rate = params.get(
-            "learning_rate", 0.001
-        )  # learning rate used for training
-        self.cuda = params.get("cuda", "0")  # GPU ids used for training
-        self.use_gpu = params.get("use_gpu", True)  # whether to user gpu for training
-        self.pretrained_model_path = params.get(
-            "pretrained_model_path", None
-        )  # path to pretrained model
-        self.save_model_path = params.get(
-            "save_model_path", "./.checkpoints"
-        )  # path to save model
-        self.log_file = params.get("log_file", "./train.log")  # path to log file
-
+        self.__dict__.update(params)
         self.use_gpu = self.use_gpu and torch.cuda.is_available()
