@@ -32,15 +32,21 @@ I originall chose ResNet-50 as the backbone as it was fast and was pretrained. E
 
 ### [Model #3: Darknet-19 Backbone](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v3.ipynb)
 
-Next, I will iterate by implementing the darknet-19 architecture described in the Yolo paper [1] and train it from scratch using the waldo maps.
+Next, I will iterate by implementing the darknet-19 architecture described in the Yolo paper [2] and train it from scratch using the waldo maps.
 
 On this iteration, I noticed that my model architecture might not be problem here. Even with the new (slightly modified) darknet-19 architecture, trained from scratch, the model is not fairing very well. I now realize that this is the case as most of the label values are zero and the model weights are just simply converging to zero. This is why the loss is going down but the precision is not going up.
 
 After 50 epochs of training, I decided to stop the training and try something else.
 
-### [Model #4: Custom Waldo Head/ResNet-50](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v3.ipynb)
+### [Model #4: Custom Waldo Head/Darknet-19](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v4.ipynb)
 
-In this iteration, I will go back to the ResNet-50 backbone (for speed and memory purposes), but this time with a different head designed specifically for the Waldo problem. What I propose is to have two separate heads: one for localization and one to compute the bounding boxes.
+In this iteration, I will stick with the Darknet-19 backbone I implemented in the third iteration, but this time with a different head designed specifically for the Waldo problem. What I propose is to have two separate heads: one for localization and one to compute the bounding boxes.
+
+The results were not very good. After about 25 epochs, I stopped training as I noticed that the mean loss had converged and yet again the mIoU never exceeded zero.
+
+### [Model #5: Custom Waldo Head/Pretrained Darknet-19](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v5.ipynb)
+
+From the last iteration, I am thinking that the darknet-19 backbone is not doing a great job at extracting features from the waldo map. As such, in this iteration, I will attempt to pretrain the darknet-19 backbone on a classification task first before adding in the object detection head.
 
 
 ## Reference
