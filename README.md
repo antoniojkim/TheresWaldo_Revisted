@@ -34,7 +34,14 @@ I originall chose ResNet-50 as the backbone as it was fast and was pretrained. E
 
 Next, I will iterate by implementing the darknet-19 architecture described in the Yolo paper [1] and train it from scratch using the waldo maps.
 
-On this iteration, I noticed that my model architecture might not be problem here. Even with the new (slightly modified) darknet-19 architecture, trained from scratch, the model is not fairing very well. Though, the mean loss is converging fairly quickly. I now realize that this is the case as most of the label values are zero and the model weights are just simply converging to zero. This is why the loss is going down but the precision is not going up.
+On this iteration, I noticed that my model architecture might not be problem here. Even with the new (slightly modified) darknet-19 architecture, trained from scratch, the model is not fairing very well. I now realize that this is the case as most of the label values are zero and the model weights are just simply converging to zero. This is why the loss is going down but the precision is not going up.
+
+After 50 epochs of training, I decided to stop the training and try something else.
+
+### [Model #4: Custom Waldo Head/ResNet-50](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v3.ipynb)
+
+In this iteration, I will go back to the ResNet-50 backbone (for speed and memory purposes), but this time with a different head designed specifically for the Waldo problem. What I propose is to have two separate heads: one for localization and one to compute the bounding boxes.
+
 
 ## Reference
 
