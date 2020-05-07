@@ -44,10 +44,34 @@ In this iteration, I will stick with the Darknet-19 backbone I implemented in th
 
 The results were not very good. After about 25 epochs, I stopped training as I noticed that the mean loss had converged and yet again the mIoU never exceeded zero.
 
-### [Model #5: Custom Waldo Head/Pretrained Darknet-19](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v5.ipynb)
+### [Model #5 Part 1: Pretrained Backbone](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v5_pretrain.ipynb)
 
 From the last iteration, I am thinking that the darknet-19 backbone is not doing a great job at extracting features from the waldo map. As such, in this iteration, I will attempt to pretrain the darknet-19 backbone on a classification task first before adding in the object detection head.
 
+It was during the process of attempting to train the classification model that I came to the conclusion that the darknet-19 architecture was not a good fit for the task of extracting features from the waldo maps. What I found was that the model was too complex and did not reduce the kernel size enough before average pooling them into a fixed size feature vector. As a result, the feature vector tended to be very similar, regardless of the input map. As such, I propose a new architecture that I will be henceforth be calling WaldoNet which consists of the following layers:
+
+| Type          | Filters | Size/Stride |
+|---------------|---------|-------------|
+| Convolutional | 64      | 3x3/1       |
+| MaxPool       |         | 2x2/2       |
+| Convolutional | 128     | 3x3/1       |
+| MaxPool       |         | 2x2/2       |
+| Convolutional | 256     | 3x3/2       |
+| Convolutional | 128     | 1x1/1       |
+| Convolutional | 256     | 3x3/2       |
+| MaxPool       |         | 2x2/2       |
+| Convolutional | 512     | 3x3/3       |
+| Convolutional | 256     | 1x1/1       |
+| Convolutional | 512     | 3x3/3       |
+|---------------|---------|-------------|
+| Convolutional | 500     | 1x1/1       |
+| AvgPool       |         | Global      |
+
+The output has shape: `[1, 500]`
+
+Notice that the architecture aggressively reduces the kernel size which is required as the waldo map inputs are fairly large.
+
+After only 15 epochs of training, the model performs fairly well on the tasks of determining if waldo is on the map, as well as which waldo map it is looking at.
 
 ## Reference
 
