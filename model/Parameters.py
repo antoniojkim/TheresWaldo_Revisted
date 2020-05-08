@@ -59,6 +59,11 @@ class Parameters:
 
     def get_logger(self, name, level=logging.INFO):
         log = logging.getLogger(name)
+
+        if self.epoch_start <= 0:
+            with open(self.log_file, "w"):
+                pass
+
         hdlr = logging.FileHandler(self.log_file)
         formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
         hdlr.setFormatter(formatter)

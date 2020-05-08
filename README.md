@@ -1,16 +1,16 @@
-# WheresWaldo-YoloV3
+# There's Waldo! (Revisited)
 
 A while ago I worked on a project called [*There's Waldo*](https://github.com/antoniojkim/WheresWaldo). The idea was to use computer vision to attempt to find the famous Waldo on any waldo map. The results were fairly good as the model did a fairly good job in identifying waldo within the maps. However, that project used a very naive sliding window approach to object detection and was thus very slow and overfit significantly on the data.
 
 For this project, I want to revisit the problem of finding Waldo using more modern computer vision approaches explored in the YOLO papers [1, 2, 3, 4, 5].
 
-## TL;DR
+## [TL;DR](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/final_model.ipynb)
 
-## Data Preparation
-
-
+In the end, I concluded that finding Waldo on a *Where's Waldo* map, is an uniquely difficult problem when it comes to object detection. Each map has a unique art style and size. Not to mention that Waldo looks different in every example and comes in many different sizes (usually **very** small). As such, the only way to create a decent model was to provide it with prior knowledge about the maps and where Waldo could be found in each map. With this, the model was able to achieve about 75% mIoU, which does not sound too great, but the results are actually quite good. Plus, the inference time is amazing!
 
 ## Experimentation
+
+The following outlines the process I went through to create the model. This includes the methods I tried (most of which evidently did not work).
 
 ### [Model #1: Initial Trial](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v1.ipynb)
 
@@ -78,6 +78,31 @@ After only 15 epochs of training, the model performs fairly well on the tasks of
 Using the new WaldoNet architecture, I tried using the custom waldo head I developed in the 4th model iteration.
 
 After 50 epochs, I found the loss values converged and the mIoU never exceeded 8% (though, it is a marked improvement over 0%). To test if the waldo head was appropriate and could work, I tried overfitting the model on test data (only 18 samples). After 500 epochs, the loss values appeared to have converged and the mIoU never exceeded 20%. This indicates that the waldo head may be insufficient.
+
+### [Model #6: Modified WaldoNet/Custom Head](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v6.ipynb)
+
+In this next iteration, we use the aforementioned custom Waldo head along with the new modified WaldoNet architecture.
+
+Previously I used a frozen pretrained WaldoNet as the size of the input images would cause my GPU to run out of memory. However, after a ton of trial and error, I found out that this was insufficient. So, I modified the WaldoNet architecture to produce even more aggressively reduced features (hoping that it would still be good enough):
+
+| Type          | Filters | Size/Stride |
+|---------------|---------|-------------|
+| Convolutional | 64      | 3x3/1       |
+| MaxPool       |         | 2x2/2       |
+| Convolutional | 128     | 3x3/2       |
+| MaxPool       |         | 2x2/2       |
+| Convolutional | 256     | 3x3/2       |
+| Convolutional | 128     | 1x1/1       |
+| Convolutional | 256     | 3x3/2       |
+| MaxPool       |         | 2x2/2       |
+| Convolutional | 512     | 3x3/2       |
+| Convolutional | 256     | 1x1/1       |
+| Convolutional | 512     | 3x3/2       |
+|---------------|---------|-------------|
+| Convolutional | 500     | 1x1/1       |
+| AvgPool       |         | Global      |
+
+To my delight, it was. I trained from scratch the WaldoNet with the custom head and it worked... sort of. In the end, I found that the *Where's Waldo* problem is almost uniquely difficult in the world of object detection as each map is wildly different is style and size from any other map. Thus, it was essentially impossible for the model to generalize what waldo looked like and where in the map it could be found. As such, I had to "overfit" the model to recognize what each map looked like and had to give it some prior knowledge about where Waldo would be in the map. From this, after many hundreds of epochs of training, I was able to train the model to about 75% mIoU which it turns out performs fairly well on all the Waldo maps in the dataset.
 
 ## Reference
 

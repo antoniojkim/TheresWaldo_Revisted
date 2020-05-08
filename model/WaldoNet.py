@@ -35,7 +35,7 @@ class WaldoNet(torch.nn.Module):
             torch.nn.MaxPool2d(kernel_size=2, stride=2),
         )
         self.block2 = torch.nn.Sequential(
-            self.Conv2dBatch(64, 128, kernel_size=3, stride=1),
+            self.Conv2dBatch(64, 128, kernel_size=3, stride=2),
             torch.nn.MaxPool2d(kernel_size=2, stride=2),
         )
         self.block3 = torch.nn.Sequential(
@@ -45,9 +45,9 @@ class WaldoNet(torch.nn.Module):
             torch.nn.MaxPool2d(kernel_size=2, stride=2),
         )
         self.block4 = torch.nn.Sequential(
-            self.Conv2dBatch(256, 512, kernel_size=3, stride=3),
+            self.Conv2dBatch(256, 512, kernel_size=3, stride=2),
             self.Conv2dBatch(512, 256, kernel_size=1),
-            self.Conv2dBatch(256, 512, kernel_size=3, stride=3),
+            self.Conv2dBatch(256, 512, kernel_size=3, stride=2),
         )
         self.block5 = torch.nn.Sequential(
             self.Conv2dBatch(512, 500, kernel_size=1),
