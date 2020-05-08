@@ -73,6 +73,12 @@ Notice that the architecture aggressively reduces the kernel size which is requi
 
 After only 15 epochs of training, the model performs fairly well on the tasks of determining if waldo is on the map, as well as which waldo map it is looking at.
 
+### [Model #5 Part 2: Custom Waldo Head](https://github.com/antoniojkim/WheresWaldo-YoloV3/tree/master/model/model_v5.ipynb)
+
+Using the new WaldoNet architecture, I tried using the custom waldo head I developed in the 4th model iteration.
+
+After 50 epochs, I found the loss values converged and the mIoU never exceeded 8% (though, it is a marked improvement over 0%). To test if the waldo head was appropriate and could work, I tried overfitting the model on test data (only 18 samples). After 500 epochs, the loss values appeared to have converged and the mIoU never exceeded 20%. This indicates that the waldo head may be insufficient.
+
 ## Reference
 
 [1] [You Only Look Once: Unified, Real-Time Object Detection](https://arxiv.org/pdf/1506.02640.pdf)
