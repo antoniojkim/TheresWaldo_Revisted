@@ -8,6 +8,10 @@ For this project, I want to revisit the problem of finding Waldo using more mode
 
 In the end, I concluded that finding Waldo on a *Where's Waldo* map, is an uniquely difficult problem when it comes to object detection. Each map has a unique art style and size. Not to mention that Waldo looks different in every example and comes in many different sizes (usually **very** small). As such, the only way to create a decent model was to provide it with prior knowledge about the maps and where Waldo could be found in each map. With this, the model was able to achieve about 75% mIoU, which does not sound too great, but the results are actually quite good. Plus, the inference time is amazing!
 
+## Limitations
+
+When completing this project, I used a single Nvidia GTX-1070ti GPU available with 8GB of vram. This significantly limited the size of the models that I was able to work with.
+
 ## Experimentation
 
 The following outlines the process I went through to create the model. This includes the methods I tried (most of which evidently did not work).
